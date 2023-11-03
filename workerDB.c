@@ -37,15 +37,25 @@ int main(int argc, char **argv) {
         //return 0;
     }
 
-    // Sort the structure 
-    for (i = 1; i < numEmployees; i++){
-      for (int j = 0; j < numEmployees - i; j++) {
-         if ((empList[j].id - empList[j + 1].id) < 0) {
-            temp = empList[j];
-            empList[j] = empList[j + 1];
-            empList[j + 1] = temp;
-         }
-      }
+   
+   // Sort the structure 
+    int j;
+    int swapped;
+    for (i = 0; i < numEmployees - 1; i++) {
+        swapped = 0;
+        for (j = 0; j < numEmployees - i - 1; j++) {
+            if (empList[j].id > empList[j + 1].id) {
+                temp = empList[j];
+                empList[j] = empList[j + 1];
+                empList[j+1] = temp;
+                swapped = 1;
+            }
+        }
+ 
+        // If no two elements were swapped by inner loop,
+        // then break
+        if (swapped == 0)
+            break;
     }
 
     int choice;
