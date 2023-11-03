@@ -38,29 +38,10 @@ int main(int argc, char **argv) {
     }
 
    
-   // Sort the structure 
-    int j;
-    int swapped;
-    for (i = 0; i < numEmployees - 1; i++) {
-        swapped = 0;
-        for (j = 0; j < numEmployees - i - 1; j++) {
-            if (empList[j].id > empList[j + 1].id) {
-                temp = empList[j];
-                empList[j] = empList[j + 1];
-                empList[j+1] = temp;
-                swapped = 1;
-            }
-        }
- 
-        // If no two elements were swapped by inner loop,
-        // then break
-        if (swapped == 0)
-            break;
-    }
+    // Sort the structure 
+    sortDB(empList, numEmployees);
 
     int choice;
-    unsigned int searchID =999999;
-    char searchName[64];
 
     //Loop for main menu with choices for the user
     while(choice!=5){
@@ -84,48 +65,12 @@ int main(int argc, char **argv) {
 
         //Lookup employee by id
         else if(choice == 2){
-            printf("Enter a 6 digit employee id: ");
-            fflush(stdout);
-            scanf("%d", &searchID);
-            printf("The search ID is : %d\n", searchID);
-            int found=0;
-            int i=0;
-            while(!found && i<numEmployees){
-                if(empList[i].id == searchID){
-                    found = 1;
-                    printf("%-10s %-18s  %7s %10s\n", "NAME", "", "SALARY", "ID");
-                    printf("-------------------------------------------------\n");
-                    printEmployee(&(empList[i]));
-                    printf("-------------------------------------------------\n\n");
-                }
-                i++;
-            }
-            if(!found){
-                printf("Employee with that ID not found !\n\n");
-            }
+            lookUpID(empList, numEmployees);
         }
 
         //Lookup employee by last name
         else if(choice == 3){
-            printf("Enter Employee's last name (no extra spaces): ");
-            fflush(stdout);
-            scanf("%s", searchName);
-            printf("The search Last Name is : %s\n", searchName);
-            int found=0;
-            int i=0;
-            while(!found && i<numEmployees){
-                if(strcmp(empList[i].lastName,searchName)==0){
-                    found = 1;
-                    printf("%-10s %-18s  %7s %10s\n", "NAME", "", "SALARY", "ID");
-                    printf("-------------------------------------------------\n");
-                    printEmployee(&(empList[i]));
-                    printf("-------------------------------------------------\n\n");
-                }
-                i++;
-            }
-            if(!found){
-                printf("Employee with that last name not found !\n\n");
-            }
+            lookUpLastName(empList, numEmployees);
         }
 
         //Add a new employee
@@ -157,6 +102,73 @@ int main(int argc, char **argv) {
     }
     return 0;
 }
+
+//Funciton to sort the strucutre based on ID
+void sortDB(struct employee empList[1024], int numEmployees){   
+    int i, j;
+    int swapped;
+    struct employee temp;
+    for (i = 0; i < numEmployees - 1; i++) {
+        swapped = 0;
+        for (j = 0; j < numEmployees - i - 1; j++) {
+            if (empList[j].id > empList[j + 1].id) {
+                temp = empList[j];
+                empList[j] = empList[j + 1];
+                empList[j+1] = temp;
+                swapped = 1;
+            }
+        }
+    }
+}
+
+//Function to lookup by ID
+void lookUpID(struct employee empList[1024], int numEmployees){
+    printf("Enter a 6 digit employee id: ");
+    unsigned int searchID = 999999;
+    fflush(stdout);
+    scanf("%d", &searchID);
+    printf("The search ID is : %d\n", searchID);
+    int found=0;
+    int i=0;
+    while(!found && i<numEmployees){
+        if(empList[i].id == searchID){
+            found = 1;
+            printf("%-10s %-18s  %7s %10s\n", "NAME", "", "SALARY", "ID");
+            printf("-------------------------------------------------\n");
+            printEmployee(&(empList[i]));
+            printf("-------------------------------------------------\n\n");
+        }
+        i++;
+    }
+    if(!found){
+        printf("Employee with that ID not found !\n\n");
+    }
+}
+
+//Function to lookup by lastname
+void lookUpLastName(struct employee empList[1024], int numEmployees){
+    char searchName[64];
+    printf("Enter Employee's last name (no extra spaces): ");
+    fflush(stdout);
+    scanf("%s", searchName);
+    printf("The search Last Name is : %s\n", searchName);
+    int found=0;
+    int i=0;
+    while(!found && i<numEmployees){
+        if(strcmp(empList[i].lastName,searchName)==0){
+            found = 1;
+            printf("%-10s %-18s  %7s %10s\n", "NAME", "", "SALARY", "ID");
+            printf("-------------------------------------------------\n");
+            printEmployee(&(empList[i]));
+            printf("-------------------------------------------------\n\n");
+        }
+        i++;
+    }
+    if(!found){
+        printf("Employee with that last name not found !\n\n");
+    }
+}
+
 
 //Function to print the structure array
 void printDB(struct employee empList[1024], int numEmployees){
